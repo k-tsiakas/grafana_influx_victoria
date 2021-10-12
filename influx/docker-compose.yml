@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+
+  telegraf:
+    container_name: telegraf
+    image: telegraf:1.18
+    volumes:
+    - ./conf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    depends_on:
+      - influxdb
+    links:
+      - influxdb
+    ports:
+    - 8125:8125/udp
+    networks:
+      - main_network
+
+  influxdb:
+    container_name: influxdb
+    image: influxdb:1.8
+    env_file: ./conf/configuration.env
+    ports:
+      - 8086:8086
+    volumes:
+      - ./files:/imports
+      - ./data:/var/lib/influxdb
+    networks:
+      - main_network
+
+networks: # network sections, here we can create or define an existing network
+  main_network: #define here a network
+    external: true # it means that we have already created this network

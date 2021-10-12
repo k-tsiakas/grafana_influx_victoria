@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - 3000:3000
+    networks:
+      - monitoring
+    volumes:
+      - ./data:/var/lib/grafana
+    user: "$ID"
+    networks:
+      - main_network
+
+networks: # network sections, here we can create or define an existing network
+  main_network: #define here a network
+    external: true # it means that we have already created this network

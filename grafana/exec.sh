@@ -1,0 +1,1 @@
+ID=$(id -u) docker-compose up -d --remove-orphans

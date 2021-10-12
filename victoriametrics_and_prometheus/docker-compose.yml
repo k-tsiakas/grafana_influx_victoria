@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    
+    volumes:
+      - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - 9090:9090
+    user: root
+    networks:
+      - main_network
+
+  victoria_metrics:
+    image: victoriametrics/victoria-metrics
+    container_name: victoria_metrics
+    
+    volumes:
+      - ./victoriametrics_data:/victoria-metrics-data
+    ports:
+      - 8428:8428
+    networks:
+      - main_network
+
+networks: # network sections, here we can create or define an existing network
+  main_network: #define here a network
+    external: true # it means that we have already created this network
